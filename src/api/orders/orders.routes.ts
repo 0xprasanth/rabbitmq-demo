@@ -14,5 +14,7 @@ router.get("/", orderController.getOrders);
 
 // /api/orders
 router.post("/", orderController.createOrder);
+// PATCH /api/orders
+router.patch("/:id", orderController.updateOrder);
 
 export default router;

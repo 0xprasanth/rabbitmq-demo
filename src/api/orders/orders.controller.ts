@@ -33,4 +33,20 @@ export class OrderController {
       order: newOrder[newOrder.length - 1],
     });
   };
+
+  updateOrder = (req: Request, res: Response) => {
+    const { id } = req.params;
+    const body = req.body;
+
+    const updatedOrder = this.orderService.updateOrder(Number(id), body);
+
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    return res.status(200).json({
+      message: "Order updated successfully",
+      order: updatedOrder,
+    });
+  };
 }

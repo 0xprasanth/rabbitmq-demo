@@ -27,4 +27,14 @@ export class OrderService {
     // if success, publish to payment and notificaiton
     return this.orders;
   }
+
+  updateOrder(id: number, updates: Partial<ICreateOrder>) {
+    const index = this.orders.findIndex((o) => o.id === id);
+    console.log("index \n id: ", index, id);
+    if (index === -1) return null;
+
+    this.orders[index] = { ...this.orders[index], ...updates };
+
+    return this.orders[index];
+  }
 }

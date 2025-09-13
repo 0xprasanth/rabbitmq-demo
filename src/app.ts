@@ -16,5 +16,5 @@ app.post("/post", (req: Request, res: Response) => {
 
 InitializeRoutes(app);
 const paymentService = new PaymentService();
-// startPaymentConsumer(paymentService);
+startPaymentConsumer(paymentService);
 export default app;
