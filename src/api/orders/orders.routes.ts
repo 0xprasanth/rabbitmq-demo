@@ -12,4 +12,7 @@ router.get("/health", (req, res) => {
 });
 router.get("/", orderController.getOrders);
 
+// /api/orders
+router.post("/", orderController.createOrder);
+
 export default router;
