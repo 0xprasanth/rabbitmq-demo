@@ -31,7 +31,7 @@ if (!fs.existsSync(dirPath)) {
 const files = [
   `${name}.controller.ts`,
   `${name}.service.ts`,
-  `${name}.order.ts`,
+  `${name}.routes.ts`,
 ];
 
 // Create files

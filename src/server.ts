@@ -1,4 +1,5 @@
 import app from "./app";
+import "module-alias/register";
 
 const port = 3000;
 
