@@ -4,15 +4,27 @@ const path = require("path");
 
 // Get args
 const args = process.argv.slice(2);
+console.log(args);
+
 const nameIndex = args.indexOf("-name");
+const pathIndex = args.indexOf("-path");
 
 if (nameIndex === -1 || !args[nameIndex + 1]) {
   console.error("Usage: node create.js -name <folderName>");
   process.exit(1);
 }
 
+if (pathIndex && !args[pathIndex + 1]) {
+  console.error("Usage: node create.js -name <folderName> -path <pathName>");
+  console.log(
+    "Note: by default all modules will be created under src/ directory even pathName is passed"
+  );
+  process.exit(1);
+}
+
 const name = args[nameIndex + 1];
-const dirPath = path.join(__dirname, "src", name);
+const pathName = pathIndex > 0 ? `src/${args[pathIndex + 1]}` : "src";
+const dirPath = path.join(__dirname, pathName, name);
 
 // Ensure src exists
 if (!fs.existsSync(path.join(__dirname, "src"))) {
@@ -27,18 +39,19 @@ if (!fs.existsSync(dirPath)) {
   console.log(`Folder already exists: ${dirPath}`);
 }
 
-// Files to create
-const files = [
-  `${name}.controller.ts`,
-  `${name}.service.ts`,
-  `${name}.routes.ts`,
-];
+// Files to create with default content
+const files = {
+  "index.ts": `// index.ts - ${name} \nimport router from "./${name}.routes";\nexport default router;\n`,
+  [`${name}.controller.ts`]: `// ${name}.controller.ts\n`,
+  [`${name}.service.ts`]: `// ${name}.service.ts\n`,
+  [`${name}.routes.ts`]: `// ${name}.routes.ts\n`,
+};
 
 // Create files
-files.forEach((file) => {
+Object.entries(files).forEach(([file, content]) => {
   const filePath = path.join(dirPath, file);
   if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, `// ${file}\n`);
+    fs.writeFileSync(filePath, content);
     console.log(`Created file: ${filePath}`);
   } else {
     console.log(`File already exists: ${filePath}`);
@@ -58,5 +71,5 @@ function printTree(dir, indent = "") {
   });
 }
 
-console.log("\nDirectory tree:");
+console.log("\nDirectory tree:\nsrc");
 printTree(path.join(__dirname, "src"));
