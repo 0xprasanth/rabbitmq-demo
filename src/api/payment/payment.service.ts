@@ -1,6 +1,5 @@
 // payment.service.ts
 
-import { Consume } from "@/rabbitmq/consumer";
 import { ICreateOrder } from "@/types";
 import { OrderService } from "@/api/orders/orders.service";
 
