@@ -2,11 +2,12 @@ import client, { Channel, ChannelModel, Connection } from "amqplib";
 
 let connection: Connection | ChannelModel | null = null;
 let channel: Channel | null = null;
-const amqpURL = "amqp://localhost";
+const RABBITMQ_URL =
+  process.env.RABBITMQ_URL || "amqp://user:root@localhost:5672";
 
 export async function getChannel(): Promise<Channel> {
   if (!connection) {
-    connection = await client.connect("amqp://user:root@localhost:5672");
+    connection = await client.connect(RABBITMQ_URL);
     channel = await connection.createChannel();
   }
   if (!channel) throw new Error("can't create Channel;");

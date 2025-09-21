@@ -3,22 +3,19 @@ import PaymentService from "./payment.service";
 import { Consume } from "@/rabbitmq/consumer";
 
 export async function startPaymentConsumer(paymentService: PaymentService) {
-  //   const channel = await getChannel();
-  //   const queue = "order";
-
-  //   await channel.assertQueue(queue);
-
-  //   channel.consume(queue, (msg) => {
-  //     if (msg) {
-  //       const order = JSON.parse(msg.content.toString());
-  //       console.log("💰 Payment consumer received:", order);
-  //       paymentService.createPayment(order); // simulate payment logic
-  //       channel.ack(msg);
-  //     }
-  //   });
-  Consume("order", (order) => {
-    console.log("Proccess payment for: ", order);
+  Consume("order", async (order) => {
     console.log("💰 Payment consumer received:", order);
-    paymentService.createPayment(order); // simulate payment logic
+    const result = await paymentService.createPayment(order);
+    
+    if (result.success) {
+      console.log("✅ Payment completed successfully for order:", order.id);
+    } else {
+      console.log("❌ Payment failed for order:", order.id, "Error:", result.error);
+      // In a real application, you might want to:
+      // 1. Retry the payment
+      // 2. Send to a dead letter queue
+      // 3. Notify administrators
+      // 4. Update order status to "failed"
+    }
   });
 }
