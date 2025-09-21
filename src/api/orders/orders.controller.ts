@@ -3,14 +3,11 @@ import { Request, Response } from "express";
 import { OrderService } from "./orders.service";
 import { ICreateOrder } from "@/types";
 import { Publish } from "@/rabbitmq/publisher";
-import PaymentService from "@/api/payment/payment.service";
 
 export class OrderController {
   private orderService: OrderService;
-  private paymentService: PaymentService;
   constructor(orderService: OrderService) {
     this.orderService = orderService;
-    this.paymentService = new PaymentService();
   }
 
   getOrders = (req: Request, res: Response) => {
